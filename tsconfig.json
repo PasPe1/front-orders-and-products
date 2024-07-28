@@ -12,6 +12,21 @@
     }
   ],
   "compilerOptions": {
-    "module": "NodeNext"
+    "module": "NodeNext",
+//     "target": "esnext",
+//     "module": "esnext",
+//     "moduleResolution": "node",
+//     "strict": false,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "baseUrl": "./",
+//     "paths": {
+//       "@/*": ["src/*"]
+//     },
+//     "types": [
+//    "vuex/types"
+// ]
+    // "typeRoots": ["./node_modules/@types"],
+    // "types": ["node", "vue", "vuex/types"]
   }
 }
