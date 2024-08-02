@@ -1,11 +1,11 @@
 <template>
-    <TopMenu />
-    <div class="container">
-      <NavigationMenu :nav-bar-items="routesList" />
-      <div class="content">
-        <slot/>
-      </div>
+  <TopMenu />
+  <div class="wrapper">
+    <NavigationMenu :nav-bar-items="routesList" />
+    <div class="content">
+      <slot />
     </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -28,14 +28,14 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.wrapper {
   display: flex;
 }
 
 .content {
-    background-color: #F0F3F5;
-    min-width: calc(100vw - 160px);
-    padding: 40px;
-    height: calc(100vh - 80px);
-  }
+  background-color: #f0f3f5;
+  min-width: calc(100vw - 160px);
+  padding: 40px;
+  height: calc(100vh - 80px);
+}
 </style>

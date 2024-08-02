@@ -1,5 +1,5 @@
 <template>
-    <button class="button" :disabled="disabled" @click.prevent="onClick">{{text}}</button>
+    <button type="submit" class="btn btn-primary" :disabled="disabled" @click.prevent="onClick">{{text}}</button>
 </template>
 
 <script lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="wrapper">
     <form class="form">
       <h2>{{ 'Default Page' }}</h2>
     </form>
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.wrapper {
   display: flex;
   background-color: bisque;
   width: 100%;

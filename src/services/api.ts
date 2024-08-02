@@ -4,11 +4,13 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use((config) => {
-    const token = localStorage.getItem('authToken')
+    const token = localStorage.getItem('accessToken')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
     return config
+  },(error) => {
+    return Promise.reject(error);
   })
 
   axiosInstance.interceptors.response.use(
@@ -20,15 +22,15 @@ axiosInstance.interceptors.request.use((config) => {
         try {
           const refreshToken = localStorage.getItem('refreshToken');
 
-          const response = await axiosInstance.post('refresh', {
+          const response = await axiosInstance.post('auth/refresh', {
             refreshToken,
           });
-          const { accessToken, refreshToken: newRefreshToken } = response.data;
+          const { access_token, refresh_token: newRefreshToken } = response.data;
 
-          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('accessToken', access_token);
           localStorage.setItem('refreshToken', newRefreshToken);
 
-          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
           return axiosInstance(originalRequest);
         } catch (refreshError) {
 

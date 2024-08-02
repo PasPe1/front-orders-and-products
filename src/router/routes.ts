@@ -1,11 +1,7 @@
 export const routesList = [
     {
-        link: "/main",
-        title: 'Приход'
-    },
-    {
-        link: "/groups",
-        title: 'Группы'
+        link: "/orders",
+        title: 'Заказы'
     },
     {
         link: "/products",

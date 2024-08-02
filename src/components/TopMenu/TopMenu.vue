@@ -1,54 +1,111 @@
 <template>
-    <div class="container">
-      <h1>Inventory</h1>
-      <div>
-        <CustomInput v-model="text" placeholder="product name"/>
+  <div class="top-menu">
+    <RedirectLink to="main">
+      <div class="top-menu_logo">
+        <img class="top-menu_logo_image" src="../../assets/icons/user-shield.svg" alt="My SVG Image" />
+        <h1 class="top-menu_title">{{'Inventory'.toUpperCase()}}</h1>
+      </div>
+      </RedirectLink>
+    <CustomInput class="top-menu_search" v-model="text" placeholder="Search" />
+    <div class="top-menu_date">
+      <p>{{ currentDay }}</p>
+      <div class="top-menu_date_time">
+        <p>{{ currentDate }}</p>
+        <i class="bi bi-clock-fill top-menu_date_time_icon"></i>
+        <p>{{ currentTime }}</p>
       </div>
     </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent } from 'vue';
+import dayjs from 'dayjs';
+import { defineAsyncComponent } from 'vue'
+
+interface TopMenuData {
+    text: string,
+    currentDay: string,
+    currentDate: string,
+    currentTime: string,
+    intervalId: any
+}
 
 export default {
-  name: "TopMenu",
+  name: 'TopMenu',
   components: {
     CustomInput: defineAsyncComponent(() => import('@/components/UI/CustomInput/CustomInput.vue')),
+    RedirectLink: defineAsyncComponent(() => import('@/components/UI/RedirectLink/RedirectLink.vue')),
   },
-  data() {
+  data(): TopMenuData {
     return {
       text: '',
+      currentDay: dayjs().format('dddd'),
+      currentDate: dayjs().format('DD MMM, YYYY'),
+      currentTime: dayjs().format('HH:mm'),
+      intervalId: null
     }
   },
   methods: {
-    onClick(this) {
-      console.log('this.loading')
-    }
-  }
+    updateTime() {
+      this.currentDay = dayjs().format('dddd'),
+      this.currentDate = dayjs().format('DD MMM, YYYY'),
+      this.currentTime = dayjs().format('HH:mm')
+    },
+  },
+  mounted() {
+    this.updateTime();
+    this.intervalId = setInterval(this.updateTime, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.intervalId);
+  },
 }
 </script>
 
 <style scoped>
-.container {
+.top-menu {
   height: 80px;
   display: flex;
   align-items: center;
+  justify-content: center;
   justify-content: space-around;
   background-color: #ffffff;
-  /* position: fixed; */
-  /* top: 0; */
   width: 100%;
   padding: 10px;
   position: relative;
   z-index: 2;
-  /* flex-direction: row; */
   box-shadow: 13px 0px 10px 15px rgba(34, 34, 34, 0.096);
 }
 
-.nav-item-link {
-    text-decoration: none;
-    color: black;
-    font-weight: 600;
-    line-height: 16px;
+.top-menu_logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
+
+.top-menu_logo_image {
+  width: 50px;
+  height: 50px;
+}
+
+.top-menu_title {
+  line-height: 14px;
+  font-size: 16px;
+  color: #03943a;
+  margin-bottom: 0px;
+}
+
+.top-menu_search {
+  max-width: 200px;
+}
+
+.top-menu_date_time {
+  display: flex;
+  gap: 10px;
+}
+
+.top-menu_date_time_icon {
+  color: var(--primary-green-color);
+}
+
 </style>

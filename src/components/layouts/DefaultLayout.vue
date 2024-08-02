@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="wrapper">
     <div class="content">
       <slot />
     </div>
@@ -7,15 +7,11 @@
 </template>
 
 <style scoped>
-.container {
+.wrapper {
   width: 100%;
-  /* min-height: 100%;
-  min-width: 100%; */
 }
 
 .content {
-    display: flex;
-    /* min-height: 100%;
-    min-width: 100%; */
+  display: flex;
 }
 </style>
