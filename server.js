@@ -1,22 +1,16 @@
 import fs from 'node:fs/promises'
 import express from 'express'
 
-
 const isProduction = process.env.NODE_ENV === 'production'
 const port = process.env.PORT || 3000
 const base = process.env.BASE || '/'
 
-
-const templateHtml = isProduction
-  ? await fs.readFile('./dist/client/index.html', 'utf-8')
-  : ''
+const templateHtml = isProduction ? await fs.readFile('./dist/client/index.html', 'utf-8') : ''
 const ssrManifest = isProduction
   ? await fs.readFile('./dist/client/.vite/ssr-manifest.json', 'utf-8')
   : undefined
 
-
 const app = express()
-
 
 let vite
 if (!isProduction) {
@@ -34,7 +28,6 @@ if (!isProduction) {
   app.use(base, sirv('./dist/client', { extensions: [] }))
 }
 
-
 app.use('*', async (req, res) => {
   try {
     const url = req.originalUrl.replace(base, '')
@@ -42,7 +35,6 @@ app.use('*', async (req, res) => {
     let template
     let render
     if (!isProduction) {
-
       template = await fs.readFile('./index.html', 'utf-8')
       template = await vite.transformIndexHtml(url, template)
       render = (await vite.ssrLoadModule('/src/entry-server.ts')).render
@@ -64,7 +56,6 @@ app.use('*', async (req, res) => {
     res.status(500).end(e.stack)
   }
 })
-
 
 app.listen(port, () => {
   console.log(`Server started at http://localhost:${port}`)

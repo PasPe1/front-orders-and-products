@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <div  class="navbar_avatar">
+    <div class="navbar_avatar">
       <img class="navbar_avatar_image" src="/avatar.jpg" />
     </div>
     <ul class="navbar_list" id="navbar">
@@ -16,6 +16,7 @@
       </li>
       <Spinner v-if="loading" />
       <CustomButton v-else text="Logout" :onClick="logout" :disabled="loading" />
+      <LanguageSwitcher />
     </ul>
   </div>
 </template>
@@ -24,21 +25,24 @@
 import { mapState } from 'vuex'
 import CustomButton from '../UI/CustomButton/CustomButton.vue'
 import Spinner from '../UI/Spinner/Spinner.vue'
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher.vue'
+import type { PropType } from 'vue'
 
-interface items {
-  title: string
+interface NavBarItem {
   link: string
+  title: string
 }
 
 export default {
   name: 'NavigationMenu',
   components: {
     Spinner,
-    CustomButton
+    CustomButton,
+    LanguageSwitcher
   },
   props: {
     navBarItems: {
-      type: Array<items>,
+      type: Array as PropType<NavBarItem[]>,
       required: true
     }
   },
@@ -57,7 +61,6 @@ export default {
 </script>
 
 <style scoped>
-
 .navbar {
   display: flex;
   justify-content: start;
@@ -101,7 +104,7 @@ export default {
 }
 
 .nav_item.active {
-  border-bottom: 3px solid #0eec20;
+  border-bottom: 3px solid var(--green-dark-color);
 }
 
 .nav_item-link {

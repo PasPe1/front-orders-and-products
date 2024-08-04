@@ -1,0 +1,12 @@
+{
+    "message": {
+        "hello": "hello"
+    },
+    "route": {
+        "orders": "Orders",
+        "products": "Products",
+        "users": "Users",
+        "settings": "Settings"
+    }
+    
+}

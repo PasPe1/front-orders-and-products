@@ -1,4 +1,5 @@
 import axiosInstance from '@/services/api'
+import type { Order } from '@/store/types'
 
 const ordersActions = {
   async getOrders({ commit }: any) {
@@ -18,6 +19,18 @@ const ordersActions = {
       commit('loading')
       await axiosInstance.delete(`orders/${id}`)
       commit('success')
+    } catch (e) {
+      console.log('error', e)
+      commit('ordersFailure')
+    }
+  },
+  async createOrder({ commit }: any, order: Order) {
+    console.log('order', order)
+    try {
+      commit('loading')
+      const response = await axiosInstance.post(`orders`, order)
+      commit('createOrderSuccess', response.data)
+      return response
     } catch (e) {
       console.log('error', e)
       commit('ordersFailure')

@@ -3,15 +3,18 @@
   <div class="wrapper">
     <NavigationMenu :nav-bar-items="routesList" />
     <div class="content">
-      <slot />
+      <Transition>
+        <slot />
+      </Transition>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { routesList } from '@/router/routes'
+import { getTranslatedRoutes } from '@/router/routes'
 import NavigationMenu from '../NavigationMenu/NavigationMenu.vue'
 import TopMenu from '../TopMenu/TopMenu.vue'
+import { computed } from 'vue'
 
 export default {
   components: {
@@ -19,7 +22,8 @@ export default {
     TopMenu
   },
   name: 'MainLayout',
-  data() {
+  setup() {
+    const routesList = computed(() => getTranslatedRoutes())
     return {
       routesList
     }
@@ -37,5 +41,19 @@ export default {
   min-width: calc(100vw - 160px);
   padding: 40px;
   height: calc(100vh - 80px);
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter-from {
+  transition-delay: 0.5s;
 }
 </style>

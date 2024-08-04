@@ -1,58 +1,123 @@
 <template>
   <div :key="product.id" class="products_list_item">
     <div class="products_list_item_dots" :class="{ repair: product.isNew === 0 }"></div>
-    <img class="products_list_item_photo" :src="product.photo"/>
-    <div>
-       <RedirectLink :to="`products/${product.id}`" :text="product.title"/>
-      <p>{{ product.serialNumber }}</p>
+    <img class="products_list_item_photo" src="../../assets/icons/monitor.jpg" />
+    <div class="products_list_item_name">
+      <RedirectLink
+        class="products_list_item_name_redirect"
+        :to="`products/${product.id}`"
+        :text="product.title"
+      />
+      <p class="products_list_item_serial-number">{{ product.serialNumber }}</p>
     </div>
-    <div>
-      <p>{{ product.guarantee.start }}</p>
-      <p>{{ product.guarantee.end }}</p>
+    <div class="products_list_item_date">
+      <p class="products_list_item_date_label">с</p>
+      <p>{{ formattedStartDate }}</p>
+      <p class="products_list_item_date_label">по</p>
+      <p>{{ formattedEndDate }}</p>
     </div>
-    <div>
-      <p class="products_list_item_status" :class="{ repair: product.isNew === 0 }">{{ product.isNew ? 'Свободен' : 'В ремонте' }}</p>
+    <div class="products_list_item_stat">
+      <p class="products_list_item_status" :class="{ repair: product.isNew === 0 }">
+        {{ product.isNew ? 'Свободен' : 'В ремонте' }}
+      </p>
     </div>
-    <div>
-      <p>{{ product.price[0].value }}</p>
-      <p>{{ product.price[1].value }}</p>
+    <div class="products_list_item_used-status">
+      <p>
+        {{ product.isNew ? 'Новый' : 'Б / У' }}
+      </p>
     </div>
-    <div>
-      <p>{{ product.date }}</p>
+    <div class="products_list_item_price">
+      <p class="products_list_item_price_usd">{{ product.price[0].value }} $</p>
+      <div class="products_list_item_price_uah">
+        <p>{{ product.price[1].value }}</p>
+        <p class="products_list_item_price_uah_symbol">UAH</p>
+      </div>
     </div>
-    <div>
-      <CustomButton text="Delete" :onClick="deleteProduct" :disabled="loading"/>
+    <div class="products_list_item_created-date">
+      <p>{{ formattedAddedDate }}</p>
     </div>
+    <div class="products_list_item_delete" @click="openModal">
+      <img src="../../assets/icons/trash.svg" />
+    </div>
+    <YesNoModal
+      :product="product"
+      :visibility="visibility"
+      @delete-product="deleteProduct"
+      @close-modal="closeModal"
+    >
+      <div class="modal-item">
+        <div class="products_list_item_dots" :class="{ repair: product.isNew === 0 }"></div>
+        <img class="products_list_item_photo" src="../../assets/icons/monitor.jpg" />
+        <div class="products_list_item_name">
+          <RedirectLink
+            class="products_list_item_name_redirect"
+            :to="`products/${product.id}`"
+            :text="product.title"
+          />
+          <p class="products_list_item_serial-number">{{ product.serialNumber }}</p>
+        </div>
+      </div>
+    </YesNoModal>
   </div>
 </template>
 
 <script lang="ts">
-import type { Product } from '@/store/types';
-import { defineAsyncComponent, type PropType } from 'vue';
-import { mapState } from 'vuex';
+import type { Product } from '@/store/types'
+import dayjs from 'dayjs'
+import { defineAsyncComponent, type PropType } from 'vue'
+import { mapState } from 'vuex'
 
-  export default {
-    name: 'ProductItem',
-    components: {
-      CustomButton: defineAsyncComponent(() => import('@/components/UI/CustomButton/CustomButton.vue')),
-      RedirectLink: defineAsyncComponent(() => import('@/components/UI/RedirectLink/RedirectLink.vue')),
+export default {
+  name: 'ProductItem',
+  components: {
+    RedirectLink: defineAsyncComponent(
+      () => import('@/components/UI/RedirectLink/RedirectLink.vue')
+    ),
+    YesNoModal: defineAsyncComponent(() => import('@/components/UI/Modal/YesNoModal.vue'))
+  },
+  data() {
+    return {
+      visibility: false
+    }
+  },
+  props: {
+    product: {
+      type: Object as PropType<Product>,
+      required: true
+    }
+  },
+  computed: {
+    ...mapState('products', ['loading']),
+    formattedStartDate() {
+      return this.formatDate(this.product.guarantee.start)
     },
-    props: {
-      product: {
-        type: Object as PropType<Product>,
-        required: true
+    formattedEndDate() {
+      return this.formatDate(this.product.guarantee.end)
+    },
+    formattedAddedDate() {
+      return this.formatDate(this.product.date)
+    }
+  },
+  methods: {
+    async deleteProduct() {
+      await this.$store.dispatch('products/deleteProduct', this.product.id)
+      await this.$store.dispatch('products/getProducts')
+    },
+    formatDate(date: string): string {
+      if (!date || !dayjs(date).isValid()) {
+        return 'Invalid date'
       }
+
+      return dayjs(date).format('DD / MM / YYYY')
     },
-    computed: {
-      ...mapState('products', ['loading'])
+    openModal() {
+      this.visibility = true
     },
-    methods: {
-      async deleteProduct() {
-        await this.$store.dispatch('products/deleteProduct', this.product.id)
-        await this.$store.dispatch('products/getProducts');
-      }
+    closeModal() {
+      this.visibility = false
     }
   }
+}
 </script>
 
 <style scoped>
@@ -63,20 +128,22 @@ import { mapState } from 'vuex';
   margin-bottom: 15px;
   padding: 10px;
   min-height: 60px;
-  display: flex;
+  display: grid;
   align-items: center;
-  flex-direction: row;
-  justify-content: space-around;
+  gap: 10px;
   transition: 0.5s;
+  grid-template-columns: 50px 100px 300px 1fr 1fr 1fr 1fr 1fr 40px;
 }
 
 .products_list_item:hover {
-  box-shadow: 0px 2px 31px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 2px 31px 0px rgba(0, 0, 0, 0.75);
 }
 
 .products_list_item_photo {
-  max-height: 70px;
+  max-height: 50px;
   width: auto;
+  display: flex;
+  margin: auto;
 }
 
 .products_list_item_dots {
@@ -86,15 +153,75 @@ import { mapState } from 'vuex';
   border-radius: 50%;
 }
 
+.products_list_item_date,
+.products_list_item_price,
+.products_list_item_dots {
+  margin: auto;
+}
+
+.products_list_item_date {
+  display: grid;
+  grid-template-columns: 25px 1fr;
+}
+
+.products_list_item_date_label {
+  font-size: 12px;
+  align-self: flex-end;
+  opacity: 0.6;
+}
+
+.products_list_item_name_redirect {
+  display: block;
+  text-decoration: underline;
+  text-decoration-color: rgb(104, 104, 104);
+  color: #3f3f3f;
+  margin: 0px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.products_list_item_serial-number {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
 .products_list_item_dots.repair {
   background-color: #3f3f3f;
 }
 
 .products_list_item_status {
-  color: #3f3f3f;
+  color: var(--primary-green-color);
 }
 
 .products_list_item_status.repair {
-  color: var(--primary-green-color);
+  color: #3f3f3f;
+}
+
+.products_list_item_price_usd {
+  font-size: 12px;
+  opacity: 0.6;
+  line-height: 4px;
+}
+
+.products_list_item_price_uah {
+  display: flex;
+  align-items: baseline;
+}
+
+.products_list_item_price_uah_symbol {
+  font-size: 8px;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.products_list_item_delete {
+  cursor: pointer;
+}
+
+.modal-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50px 100px 1fr;
 }
 </style>

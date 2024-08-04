@@ -14,6 +14,10 @@ const ordersMutations = {
   },
   success(state: OrdersState) {
     state.loading = false
+  },
+  createOrderSuccess(state: OrdersState, order: Order) {
+    state.loading = false
+    state.orders = [...state.orders, order]
   }
 }
 

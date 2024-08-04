@@ -2,11 +2,17 @@
   <div class="top-menu">
     <RedirectLink to="main">
       <div class="top-menu_logo">
-        <img class="top-menu_logo_image" src="../../assets/icons/user-shield.svg" alt="My SVG Image" />
-        <h1 class="top-menu_title">{{'Inventory'.toUpperCase()}}</h1>
+        <img
+          class="top-menu_logo_image"
+          src="../../assets/icons/user-shield.svg"
+          alt="My SVG Image"
+        />
+        <h1 class="top-menu_title">{{ 'Inventory'.toUpperCase() }}</h1>
       </div>
-      </RedirectLink>
-    <CustomInput class="top-menu_search" v-model="text" placeholder="Search" />
+    </RedirectLink>
+    <div class="top-menu_search">
+      <CustomInput v-model="text" placeholder="Search" :isLabel="false" />
+    </div>
     <div class="top-menu_date">
       <p>{{ currentDay }}</p>
       <div class="top-menu_date_time">
@@ -19,22 +25,24 @@
 </template>
 
 <script lang="ts">
-import dayjs from 'dayjs';
+import dayjs from 'dayjs'
 import { defineAsyncComponent } from 'vue'
 
 interface TopMenuData {
-    text: string,
-    currentDay: string,
-    currentDate: string,
-    currentTime: string,
-    intervalId: any
+  text: string
+  currentDay: string
+  currentDate: string
+  currentTime: string
+  intervalId: any
 }
 
 export default {
   name: 'TopMenu',
   components: {
     CustomInput: defineAsyncComponent(() => import('@/components/UI/CustomInput/CustomInput.vue')),
-    RedirectLink: defineAsyncComponent(() => import('@/components/UI/RedirectLink/RedirectLink.vue')),
+    RedirectLink: defineAsyncComponent(
+      () => import('@/components/UI/RedirectLink/RedirectLink.vue')
+    )
   },
   data(): TopMenuData {
     return {
@@ -47,18 +55,18 @@ export default {
   },
   methods: {
     updateTime() {
-      this.currentDay = dayjs().format('dddd'),
-      this.currentDate = dayjs().format('DD MMM, YYYY'),
-      this.currentTime = dayjs().format('HH:mm')
-    },
+      ;(this.currentDay = dayjs().format('dddd')),
+        (this.currentDate = dayjs().format('DD MMM, YYYY')),
+        (this.currentTime = dayjs().format('HH:mm'))
+    }
   },
   mounted() {
-    this.updateTime();
-    this.intervalId = setInterval(this.updateTime, 1000);
+    this.updateTime()
+    this.intervalId = setInterval(this.updateTime, 1000)
   },
-  beforeDestroy() {
-    clearInterval(this.intervalId);
-  },
+  beforeUnmount() {
+    clearInterval(this.intervalId)
+  }
 }
 </script>
 
@@ -107,5 +115,4 @@ export default {
 .top-menu_date_time_icon {
   color: var(--primary-green-color);
 }
-
 </style>

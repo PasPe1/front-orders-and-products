@@ -7,10 +7,10 @@ declare module '@vue/runtime-core' {
 }
 
 export interface RootState {
-  auth: AuthState;
-  user: UserState;
-  products: ProductsState;
-  orders: OrdersState;
+  auth: AuthState
+  user: UserState
+  products: ProductsState
+  orders: OrdersState
 }
 
 export interface UserState {
@@ -36,8 +36,9 @@ export interface Product {
     end: string
   }
   price: { value: number; symbol: string; isDefault: number }[]
-  order: number
+  order: Order
   date: string
+  orderId: number
 }
 
 export interface ProductsState {
@@ -46,10 +47,10 @@ export interface ProductsState {
 }
 
 export interface Order {
-  id: number,
-  title: string,
-  date: string,
-  description: string,
+  id: number
+  title: string
+  date: string
+  description: string
   products: Product[]
 }
 

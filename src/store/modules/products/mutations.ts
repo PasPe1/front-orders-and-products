@@ -14,6 +14,14 @@ const productsMutations = {
   },
   success(state: ProductsState) {
     state.loading = false
+  },
+  createProductSuccess(state: ProductsState, product: Product) {
+    state.loading = false
+    state.products = [...state.products, product]
+  },
+  cleareProducts(state: ProductsState) {
+    state.loading = false
+    state.products = []
   }
 }
 
