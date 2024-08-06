@@ -1,12 +1,91 @@
 {
-    "message": {
-        "hello": "hello"
+    "local": {
+        "en": "English",
+        "ua": "Ukraininan"
     },
     "route": {
         "orders": "Orders",
         "products": "Products",
         "users": "Users",
         "settings": "Settings"
+    },
+    "logout": "LOGOUT",
+    "orders": {
+        "orderInfo": {
+            "addProduct": "Add Product",
+            "status": {
+                "available": "Available",
+                "repair": "Repair"
+            }
+        },
+        "orderItem": {
+            "countProduct": "Products"
+        },
+        "orders": "Orders"
+    },
+    "products": {
+        "productItem": {
+            "from": "from",
+            "to": "to",
+            "status": {
+                "available": "Available",
+                "repair": "Repair"
+            },
+            "usedStatus": {
+                "new": "New",
+                "used": "Used"
+            }
+        },
+        "products": "Products",
+        "type": "Type",
+        "specification": "Specification"
+    },
+    "topMenu": {
+        "search": "Search",
+        "activeTabs": "Active Tabs"
+    },
+    "addOrderModal": {
+        "createOrder": "Create Order",
+        "title": "Title",
+        "date": "Date",
+        "description": "Description",
+        "create": "Create"
+    },
+    "AddProductModal": {
+        "createProduct": "Create Product",
+        "serialNumber": "Serial Number",
+        "status": "Status",
+        "title": "Title",
+        "type": "Type",
+        "specification": "Specification",
+        "start": "Start",
+        "end": "End",
+        "priceUSD": "Price USD",
+        "priceUAH": "Price UAH",
+        "sequence": "Sequence",
+        "date": "Date",
+        "create": "Create"
+    },
+    "YesNoModal": {
+        "title": "You sure want delete?",
+        "cancel": "CANCEL",
+        "delete": "DELETE"
+    },
+    "login": {
+        "login": "Login",
+        "dhAccount": "Doesn't have account?",
+        "register": "Register",
+        "email": "Email",
+        "password": "Password"
+    },
+    "register": {
+        "registration": "Registration",
+        "dhAccount": "Do you have an account?",
+        "register": "Register",
+        "email": "Email",
+        "password": "Password",
+        "firstName": "First Name",
+        "lastName": "Last Name"
     }
-    
+
 }

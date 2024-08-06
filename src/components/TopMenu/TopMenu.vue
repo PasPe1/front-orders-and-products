@@ -1,6 +1,6 @@
 <template>
   <div class="top-menu">
-    <RedirectLink to="main">
+    <RedirectLink to="orders">
       <div class="top-menu_logo">
         <img
           class="top-menu_logo_image"
@@ -11,7 +11,12 @@
       </div>
     </RedirectLink>
     <div class="top-menu_search">
-      <CustomInput v-model="text" placeholder="Search" :isLabel="false" />
+      <CustomInput v-model="text" :placeholder="$t('topMenu.search')" :isLabel="false" />
+    </div>
+    <div>
+      <p>
+        {{ $t('topMenu.activeTabs') }}: <span>{{ activeTabs }}</span>
+      </p>
     </div>
     <div class="top-menu_date">
       <p>{{ currentDay }}</p>
@@ -27,6 +32,11 @@
 <script lang="ts">
 import dayjs from 'dayjs'
 import { defineAsyncComponent } from 'vue'
+import websocketService from '@/services/websocket.service'
+// import { useI18n } from 'vue-i18n'
+import 'dayjs/locale/uk'
+// import i18n from '@/locales/i18n'
+// import { io } from 'socket.io-client'
 
 interface TopMenuData {
   text: string
@@ -34,7 +44,12 @@ interface TopMenuData {
   currentDate: string
   currentTime: string
   intervalId: any
+  activeTabs: number
 }
+
+// const socket = io('http://localhost:3001')
+
+// const locale = i18n.mode.
 
 export default {
   name: 'TopMenu',
@@ -50,22 +65,31 @@ export default {
       currentDay: dayjs().format('dddd'),
       currentDate: dayjs().format('DD MMM, YYYY'),
       currentTime: dayjs().format('HH:mm'),
-      intervalId: null
+      intervalId: null,
+      activeTabs: 0
     }
   },
   methods: {
     updateTime() {
-      ;(this.currentDay = dayjs().format('dddd')),
-        (this.currentDate = dayjs().format('DD MMM, YYYY')),
-        (this.currentTime = dayjs().format('HH:mm'))
+      // const { locale } = useI18n()
+      // dayjs.locale(locale.value === 'ua' ? 'uk' : locale.value)
+      this.currentDay = dayjs().format('dddd')
+      this.currentDate = dayjs().format('DD MMM, YYYY')
+      this.currentTime = dayjs().format('HH:mm')
+    },
+    updateActiveTabs(count: number) {
+      console.log('activeTabs', count)
+      this.activeTabs = count
     }
   },
-  mounted() {
+  async mounted() {
     this.updateTime()
     this.intervalId = setInterval(this.updateTime, 1000)
+    websocketService.onUpdateActiveTabs(this.updateActiveTabs)
   },
   beforeUnmount() {
     clearInterval(this.intervalId)
+    websocketService.notifyTabClosed()
   }
 }
 </script>

@@ -1,29 +1,35 @@
 <template>
   <div class="wrapper">
     <form class="form">
-      <h2>Login</h2>
-      <CustomInput type="email" v-model="email" placeholder="Email"/>
-      <CustomInput type="password" v-model="password" placeholder="Password"/>
+      <h2>{{ $t('login.login') }}</h2>
+      <CustomInput type="email" v-model="email" :placeholder="$t('login.email')" />
+      <CustomInput type="password" v-model="password" :placeholder="$t('login.password')" />
       <div class="form_submit-buttons">
-        <Spinner v-if="loading"/>
-        <CustomButton v-else text="Login" :onClick="handleLogin" :disabled="loading"/>
-        <p>Doesnt have account? <RedirectLink to="register" text="Register"/></p>
+        <Spinner v-if="loading" />
+        <CustomButton v-else :text="$t('login.login')" :onClick="handleLogin" :disabled="loading" />
+        <p>
+          {{ $t('login.dhAccount') }} <RedirectLink to="register" :text="$t('login.register')" />
+        </p>
       </div>
     </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineAsyncComponent } from 'vue';
-import { mapState } from 'vuex';
+import { defineAsyncComponent } from 'vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Login',
   components: {
     CustomInput: defineAsyncComponent(() => import('@/components/UI/CustomInput/CustomInput.vue')),
-    CustomButton: defineAsyncComponent(() => import('@/components/UI/CustomButton/CustomButton.vue')),
+    CustomButton: defineAsyncComponent(
+      () => import('@/components/UI/CustomButton/CustomButton.vue')
+    ),
     Spinner: defineAsyncComponent(() => import('@/components/UI/Spinner/Spinner.vue')),
-    RedirectLink: defineAsyncComponent(() => import('@/components/UI/RedirectLink/RedirectLink.vue')),
+    RedirectLink: defineAsyncComponent(
+      () => import('@/components/UI/RedirectLink/RedirectLink.vue')
+    )
   },
   data() {
     return {

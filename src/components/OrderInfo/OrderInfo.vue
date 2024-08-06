@@ -9,7 +9,7 @@
         <div class="order-info_add-product_circle">
           <img src="../../assets/icons/white-cross.svg" />
         </div>
-        <p>Add product</p>
+        <p>{{ $t('orders.orderInfo.addProduct') }}</p>
       </div>
     </div>
     <div class="order-info_product-list">
@@ -29,39 +29,82 @@
         </div>
         <div>
           <p class="order-info_product-list_item_status" :class="{ repair: product.isNew === 0 }">
-            {{ product.isNew ? 'Свободен' : 'В ремонте' }}
+            {{
+              product.isNew
+                ? $t('orders.orderInfo.status.available')
+                : $t('orders.orderInfo.status.repair')
+            }}
           </p>
         </div>
-        <div class="orders_list_item_delete" @click="deleteProduct(product.id)">
+        <div class="orders_list_item_delete" @click="openDeleteModal">
           <img src="../../assets/icons/trash.svg" />
         </div>
+        <YesNoModal
+          :item="product"
+          :visibility="showDeleteModal"
+          @delete-product="deleteProduct"
+          @close-modal="closeDeleteModal"
+        >
+          <div class="modal-item">
+            <div
+              class="order-info_product-list_item_dot"
+              :class="{ repair: product.isNew === 0 }"
+            ></div>
+            <img class="order-info_item_photo" src="../../assets/icons/monitor.jpg" />
+            <div>
+              <RedirectLink
+                class="order-info_product_title"
+                :to="`products/${product.id}`"
+                :text="product.title"
+              />
+              <p class="order-info_product_serial-number">{{ product.serialNumber }}</p>
+            </div>
+            <div>
+              <p
+                class="order-info_product-list_item_status"
+                :class="{ repair: product.isNew === 0 }"
+              >
+                {{
+                  product.isNew
+                    ? $t('orders.orderInfo.status.available')
+                    : $t('orders.orderInfo.status.repair')
+                }}
+              </p>
+            </div>
+          </div>
+        </YesNoModal>
       </div>
     </div>
-    <AddProductModal
-      :visibility="showModal"
-      variant="success"
-      @close-modal="closeModal"
-      @create-product="createProduct"
-    />
   </div>
+  <AddProductModal
+    :visibility="showModal"
+    :loading="loading"
+    variant="success"
+    @close-modal="closeModal"
+    @create-product="createProduct"
+  />
 </template>
 
 <script lang="ts">
 import type { Order, Product } from '@/store/types'
-import type { PropType } from 'vue'
+import { defineAsyncComponent, type PropType } from 'vue'
 import { mapState } from 'vuex'
-import AddProductModal from '../UI/Modal/AddProductModal.vue'
-import RedirectLink from '../UI/RedirectLink/RedirectLink.vue'
 
 export default {
   name: 'OrderInfo',
   components: {
-    AddProductModal,
-    RedirectLink
+    AddProductModal: defineAsyncComponent(
+      () => import('@/components/UI/Modal/AddProductModal.vue')
+    ),
+    RedirectLink: defineAsyncComponent(
+      () => import('@/components/UI/RedirectLink/RedirectLink.vue')
+    ),
+    YesNoModal: defineAsyncComponent(() => import('@/components/UI/Modal/YesNoModal.vue'))
   },
   data() {
     return {
-      showModal: false
+      showModal: false,
+      showDeleteModal: false
     }
   },
   props: {
@@ -90,20 +133,26 @@ export default {
     closeModal() {
       this.showModal = false
     },
+    openDeleteModal() {
+      this.showDeleteModal = true
+    },
+    closeDeleteModal() {
+      this.showDeleteModal = false
+    },
     resetOrder() {
       this.$emit('reset-order')
     },
-    async deleteProduct(id: number) {
-      await this.$store.dispatch('products/deleteProduct', id)
+    async deleteProduct(product: Product) {
+      await this.$store.dispatch('products/deleteProduct', product.id)
       await this.$store.dispatch('products/getProducts')
       await this.$store.dispatch('orders/getOrders')
     },
     async createProduct(product: Product) {
       try {
         product.orderId = this.order.id
-        console.log('product', product)
         await this.$store.dispatch('products/createProduct', product)
         await this.$store.dispatch('orders/getOrders')
+        this.closeModal()
       } catch (e) {
         console.log(e)
       }
@@ -128,6 +177,7 @@ export default {
 }
 
 .order-info_add-product {
+  width: fit-content;
   display: flex;
   align-items: center;
   justify-content: start;
@@ -189,7 +239,7 @@ export default {
   background-color: rgb(255, 255, 255);
   height: 50px;
   border: 1px solid #e3e8ea;
-  padding: 10px;
+  /* padding: 10px; */
   display: grid;
   grid-template-columns: 50px 100px 200px 1fr 30px;
   align-items: center;
@@ -235,5 +285,10 @@ export default {
 
 .orders_list_item_delete {
   cursor: pointer;
+}
+
+.modal-item {
+  display: grid;
+  grid-template-columns: 50px 100px 3fr 1fr;
 }
 </style>

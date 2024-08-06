@@ -3,19 +3,28 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4>Create Order</h4>
+          <h4>{{ $t('addOrderModal.createOrder') }}</h4>
           <button type="button" @click="closeModal()" class="btn-close"></button>
         </div>
         <div class="modal-body">
           <form class="modal-form">
-            <CustomInput v-model="order.title" placeholder="Title" />
-            <CustomInput v-model="order.date" type="date" placeholder="Date" />
-            <CustomInput v-model="order.description" type="textarea" placeholder="Description" />
+            <CustomInput v-model="order.title" :placeholder="$t('addOrderModal.title')" />
+            <CustomInput v-model="order.date" type="date" :placeholder="$t('addOrderModal.date')" />
+            <CustomInput
+              v-model="order.description"
+              type="textarea"
+              :placeholder="$t('addOrderModal.description')"
+            />
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" @click="createOrder()" :class="'btn btn-' + variant">
-            {{ 'Create' }}
+          <button
+            type="button"
+            @click="createOrder()"
+            :class="'btn btn-' + variant"
+            :disabled="loading"
+          >
+            {{ $t('addOrderModal.create') }}
           </button>
         </div>
       </div>
@@ -42,7 +51,8 @@ export default {
   },
   props: {
     visibility: Boolean,
-    variant: String
+    variant: String,
+    loading: Boolean
   },
   methods: {
     closeModal() {

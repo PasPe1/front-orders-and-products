@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4>Create Product</h4>
+          <h4>{{ $t('AddProductModal.createProduct') }}</h4>
           <button type="button" @click="closeModal()" class="btn-close"></button>
         </div>
         <div class="modal-body">
@@ -12,31 +12,64 @@
               <CustomInput
                 v-model="product.serialNumber"
                 type="number"
-                placeholder="serialNumber"
+                :placeholder="$t('AddProductModal.serialNumber')"
               />
-              <CustomInput v-model="product.isNew" type="number" placeholder="isNew" />
+              <CustomInput
+                v-model="product.isNew"
+                type="number"
+                :placeholder="$t('AddProductModal.status')"
+              />
               <!-- <CustomInput v-model="product.photo" type="file" placeholder="photo" /> -->
-              <CustomInput v-model="product.title" placeholder="Title" />
-              <CustomInput v-model="product.type" placeholder="type" />
+              <CustomInput v-model="product.title" :placeholder="$t('AddProductModal.title')" />
+              <CustomInput v-model="product.type" :placeholder="$t('AddProductModal.type')" />
               <CustomInput
                 v-model="product.specification"
                 type="number"
-                placeholder="specification"
+                :placeholder="$t('AddProductModal.specification')"
               />
             </div>
             <div>
-              <CustomInput v-model="product.guarantee.start" type="date" placeholder="start" />
-              <CustomInput v-model="product.guarantee.end" type="date" placeholder="End" />
-              <CustomInput v-model="product.price[0].value" type="number" placeholder="price USD" />
-              <CustomInput v-model="product.price[1].value" type="number" placeholder="price UAH" />
-              <CustomInput v-model="product.sequence" type="number" placeholder="sequence" />
-              <CustomInput v-model="product.date" type="date" placeholder="date" />
+              <CustomInput
+                v-model="product.guarantee.start"
+                type="date"
+                :placeholder="$t('AddProductModal.start')"
+              />
+              <CustomInput
+                v-model="product.guarantee.end"
+                type="date"
+                :placeholder="$t('AddProductModal.end')"
+              />
+              <CustomInput
+                v-model="product.price[0].value"
+                type="number"
+                :placeholder="$t('AddProductModal.priceUSD')"
+              />
+              <CustomInput
+                v-model="product.price[1].value"
+                type="number"
+                :placeholder="$t('AddProductModal.priceUAH')"
+              />
+              <CustomInput
+                v-model="product.sequence"
+                type="number"
+                :placeholder="$t('AddProductModal.sequence')"
+              />
+              <CustomInput
+                v-model="product.date"
+                type="date"
+                :placeholder="$t('AddProductModal.date')"
+              />
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" @click="createProduct()" :class="'btn btn-' + variant">
-            {{ 'Create' }}
+          <button
+            type="button"
+            @click="createProduct()"
+            :class="'btn btn-' + variant"
+            :disabled="loading"
+          >
+            {{ $t('AddProductModal.create') }}
           </button>
         </div>
       </div>
@@ -76,7 +109,8 @@ export default {
   },
   props: {
     visibility: Boolean,
-    variant: String
+    variant: String,
+    loading: Boolean
   },
   methods: {
     closeModal() {

@@ -1,8 +1,91 @@
 {
+    "local": {
+        "en": "Англійська",
+        "ua": "Українська"
+    },
     "route": {
         "orders": "Замовлення",
         "products": "Продукти",
         "users": "Користувачі",
         "settings": "Налаштування"
+    },
+    "logout": "ВИЙТИ",
+    "orders": {
+        "orderInfo": {
+            "addProduct": "Додати Продукт",
+            "status": {
+                "available": "В наявності",
+                "repair": "У ремонті"
+            }
+        },
+        "orderItem": {
+            "countProduct": "Продукт(ів)"
+        },
+        "orders": "Замовлення"
+    },
+    "products": {
+        "productItem": {
+            "from": "з",
+            "to": "по",
+            "status": {
+                "available": "В наявності",
+                "repair": "У ремонті"
+            },
+            "usedStatus": {
+                "new": "Новий",
+                "used": "Вживаний"
+            }
+        },
+        "products": "Продукти",
+        "type": "Тип",
+        "specification": "Специфікація"
+    },
+    "topMenu": {
+        "search": "Пошук",
+        "activeTabs": "Активні Вікна"
+    },
+    "addOrderModal": {
+        "createOrder": "Створити Замовлення",
+        "title": "Заголовок",
+        "date": "Дата",
+        "description": "Опис",
+        "create": "Створити"
+    },
+    "AddProductModal": {
+        "createProduct": "Створити Продукт",
+        "serialNumber": "Серійний Номер",
+        "status": "Статус",
+        "title": "Заголовок",
+        "type": "Тип",
+        "specification": "Специфікація",
+        "start": "Початок",
+        "end": "Кінець",
+        "priceUSD": "Цна USD",
+        "priceUAH": "Цна UAH",
+        "sequence": "Послідовність",
+        "date": "Дата",
+        "create": "Створити"
+    },
+    "YesNoModal": {
+        "title": "Ви впевнені що хочете видалити?",
+        "cancel": "ВІДМІНИТИ",
+        "delete": "ВИДАЛИТИ"    
+    },
+    "login": {
+        "login": "Логін",
+        "dhAccount": "Не маєте акканта?",
+        "register": "Створити",
+        "email": "Електронна пошта",
+        "password": "Пароль"
+    },
+    "register": {
+        "registration": "Реєстрація",
+        "dhAccount": "У вас є обліковий запис?",
+        "register": "Зареєструватися",
+        "email": "Електронна пошта",
+        "password": "Пароль",
+        "firstName": "Ім'я",
+        "lastName": "Прізвище"
     }
+
 }

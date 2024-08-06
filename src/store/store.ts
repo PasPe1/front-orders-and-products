@@ -6,13 +6,13 @@ import VuexPersister from 'vuex-persister'
 import type { RootState } from './types'
 import { ordersModule } from './modules/orders'
 
-const isClient = typeof window !== 'undefined';
+const isClient = typeof window !== 'undefined'
 
-let vuexPersister: any = null;
+let vuexPersister: any = null
 if (isClient) {
   vuexPersister = new VuexPersister<RootState>({
     storage: localStorage
-  });
+  })
 }
 
 export const store = createStore({
@@ -20,7 +20,7 @@ export const store = createStore({
     auth: authModule,
     user: userModule,
     products: productsModule,
-    orders: ordersModule,
+    orders: ordersModule
   },
   plugins: isClient ? [vuexPersister.persist] : []
 })

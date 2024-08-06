@@ -7,6 +7,7 @@ import i18n from '@/locales/i18n'
 
 const { app } = createApp()
 
+app.use(i18n)
 app.use(router)
 app.use(store)
 app.use(i18n)

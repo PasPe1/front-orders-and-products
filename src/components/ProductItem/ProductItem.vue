@@ -11,19 +11,27 @@
       <p class="products_list_item_serial-number">{{ product.serialNumber }}</p>
     </div>
     <div class="products_list_item_date">
-      <p class="products_list_item_date_label">с</p>
+      <p class="products_list_item_date_label">{{ $t('products.productItem.from') }}</p>
       <p>{{ formattedStartDate }}</p>
-      <p class="products_list_item_date_label">по</p>
+      <p class="products_list_item_date_label">{{ $t('products.productItem.to') }}</p>
       <p>{{ formattedEndDate }}</p>
     </div>
     <div class="products_list_item_stat">
       <p class="products_list_item_status" :class="{ repair: product.isNew === 0 }">
-        {{ product.isNew ? 'Свободен' : 'В ремонте' }}
+        {{
+          product.isNew
+            ? $t('products.productItem.status.available')
+            : $t('products.productItem.status.repair')
+        }}
       </p>
     </div>
     <div class="products_list_item_used-status">
       <p>
-        {{ product.isNew ? 'Новый' : 'Б / У' }}
+        {{
+          product.isNew
+            ? $t('products.productItem.usedStatus.new')
+            : $t('products.productItem.usedStatus.used')
+        }}
       </p>
     </div>
     <div class="products_list_item_price">
@@ -34,13 +42,14 @@
       </div>
     </div>
     <div class="products_list_item_created-date">
+      <p class="products_list_item_created-date_monthly">{{ formattedMonthDate }}</p>
       <p>{{ formattedAddedDate }}</p>
     </div>
     <div class="products_list_item_delete" @click="openModal">
       <img src="../../assets/icons/trash.svg" />
     </div>
     <YesNoModal
-      :product="product"
+      :item="product"
       :visibility="visibility"
       @delete-product="deleteProduct"
       @close-modal="closeModal"
@@ -89,13 +98,16 @@ export default {
   computed: {
     ...mapState('products', ['loading']),
     formattedStartDate() {
-      return this.formatDate(this.product.guarantee.start)
+      return this.formatDate(this.product.guarantee.start, 'DD / MM / YYYY')
     },
     formattedEndDate() {
-      return this.formatDate(this.product.guarantee.end)
+      return this.formatDate(this.product.guarantee.end, 'DD / MM / YYYY')
     },
     formattedAddedDate() {
-      return this.formatDate(this.product.date)
+      return this.formatDate(this.product.date, 'DD / MMM / YYYY')
+    },
+    formattedMonthDate() {
+      return this.formatDate(this.product.date, 'DD / MM')
     }
   },
   methods: {
@@ -103,12 +115,12 @@ export default {
       await this.$store.dispatch('products/deleteProduct', this.product.id)
       await this.$store.dispatch('products/getProducts')
     },
-    formatDate(date: string): string {
+    formatDate(date: string, format: string): string {
       if (!date || !dayjs(date).isValid()) {
         return 'Invalid date'
       }
 
-      return dayjs(date).format('DD / MM / YYYY')
+      return dayjs(date).format(format)
     },
     openModal() {
       this.visibility = true
@@ -161,7 +173,7 @@ export default {
 
 .products_list_item_date {
   display: grid;
-  grid-template-columns: 25px 1fr;
+  grid-template-columns: 30px 1fr;
 }
 
 .products_list_item_date_label {
@@ -213,6 +225,17 @@ export default {
   font-size: 8px;
   font-weight: 600;
   margin-left: 5px;
+}
+
+.products_list_item_created-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.products_list_item_created-date_monthly {
+  opacity: 0.6;
+  font-size: 12px;
 }
 
 .products_list_item_delete {

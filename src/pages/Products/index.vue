@@ -1,37 +1,44 @@
 <template>
   <div class="products">
     <div class="products_head">
-      <h3>Products / {{ products.length }}</h3>
-      <CustomInput class="products_head_search" v-model="type" placeholder="Type" />
-      <CustomInput
-        class="products_head_search"
-        v-model="specification"
-        placeholder="Specification"
-      />
+      <h3 class="products_head_title">{{ $t('products.products') }} / {{ products.length }}</h3>
+      <div class="products_head_filter">
+        <CustomSelectInput
+          class="products_head_filter_input"
+          v-model="type"
+          type="select"
+          :placeholder="$t('products.type')"
+        />
+        <CustomSelectInput
+          class="products_head_filter_input"
+          v-model="specification"
+          :placeholder="$t('products.specification')"
+          type="select"
+        />
+      </div>
     </div>
     <div v-if="products" class="products_list">
       <ProductItem v-for="product in products" :key="product.id" :product="product" />
     </div>
-    <AddOrderModal v-if="showModal" @close="closeModal" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineAsyncComponent } from 'vue'
 import { mapState } from 'vuex'
-import AddOrderModal from '@/components/UI/Modal/AddOrderModal.vue'
 
 export default {
   name: 'Products',
   components: {
     ProductItem: defineAsyncComponent(() => import('@/components/ProductItem/ProductItem.vue')),
-    AddOrderModal
+    CustomSelectInput: defineAsyncComponent(
+      () => import('@/components/UI/CustomSelectInput/CustomSelectInput.vue')
+    )
   },
   data() {
     return {
       type: '',
-      specification: '',
-      showModal: true
+      specification: ''
     }
   },
   computed: {
@@ -39,14 +46,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('products/getProducts')
-  },
-  methods: {
-    openModal() {
-      this.showModal = true
-    },
-    closeModal() {
-      this.showModal = false
-    }
   }
 }
 </script>
@@ -61,5 +60,15 @@ export default {
 
 .products_head {
   margin-bottom: 30px;
+  display: flex;
+}
+
+.products_head_title {
+  padding: 0px;
+  margin-bottom: 0px;
+}
+
+.products_head_filter {
+  display: flex;
 }
 </style>

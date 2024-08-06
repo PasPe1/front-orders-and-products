@@ -4,7 +4,7 @@
       <div class="orders_head_circle-button" @click="openModal">
         <div><img src="../../assets//icons/white-cross.svg" /></div>
       </div>
-      <h3>Orders / {{ orders.length }}</h3>
+      <h3>{{ $t('orders.orders') }} / {{ orders.length }}</h3>
     </div>
     <div class="orders_list">
       <div v-if="orders" class="orders_list_item" :class="{ active: showProduct }">
@@ -14,7 +14,7 @@
           :order="order"
           :active="activeOrder"
           :showProduct="showProduct"
-          @click="setActiveOrder(order)"
+          @setActive="setActiveOrder(order)"
         />
       </div>
       <OrderInfo v-if="activeOrder" :order="activeOrder" @reset-order="resetActiveOrder" />
@@ -22,6 +22,7 @@
     <AddOrderModal
       variant="success"
       :visibility="showModal"
+      :loading="loading"
       @close-modal="closeModal"
       @create-order="createOrder"
     />

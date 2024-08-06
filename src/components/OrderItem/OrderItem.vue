@@ -1,5 +1,9 @@
 <template>
-  <div class="order_item" :class="{ active: active?.id === order.id, twisted: showProduct }">
+  <div
+    @click="$emit('set-active', order)"
+    class="order_item"
+    :class="{ active: active?.id === order.id, twisted: showProduct }"
+  >
     <p v-if="!active" class="order_item_name">{{ order.title }}</p>
     <div class="order_item_products-number">
       <div class="order_item_products-number_svg">
@@ -7,10 +11,13 @@
       </div>
       <div class="order_item_products-number_count">
         <p class="order_item_products-number_count_number">{{ order.products.length }}</p>
-        <p class="order_item_products-number_count_name">Продукта</p>
+        <p class="order_item_products-number_count_name">
+          {{ $t('orders.orderItem.countProduct') }}
+        </p>
       </div>
     </div>
-    <div>
+    <div class="order_item_products_created-date">
+      <p class="order_item_products_created-date_monthly">{{ formattedMonthDate }}</p>
       <p>{{ formattedAddedDate }}</p>
     </div>
     <div v-if="!active" class="order_item_price">
@@ -20,7 +27,7 @@
         <p class="order_item_price_uah_symbol">UAH</p>
       </div>
     </div>
-    <div v-if="!active" class="order_item_delete" @click.stop="deleteOrder">
+    <div v-if="!active" class="order_item_delete" @click.stop="openModal">
       <img src="../../assets/icons/trash.svg" />
     </div>
     <div v-else class="order_item_pin" :class="{ active: active?.id === order.id }">
@@ -31,20 +38,49 @@
       />
     </div>
   </div>
+  <YesNoModal
+    :item="order"
+    :visibility="showModal"
+    @delete-product="deleteOrder"
+    @close-modal="closeModal"
+  >
+    <div class="modal-item">
+      <p>{{ order.title }}</p>
+      <div class="order_item_products-number">
+        <div class="order_item_products-number_svg">
+          <img src="../../assets/icons/hamburger-menu.svg" />
+        </div>
+        <div class="order_item_products-number_count">
+          <p class="order_item_products-number_count_number">{{ order.products.length }}</p>
+          <p class="order_item_products-number_count_name">
+            {{ $t('orders.orderItem.countProduct') }}
+          </p>
+        </div>
+      </div>
+      <div class="order_item_products_created-date">
+        <p class="order_item_products_created-date_monthly">{{ formattedMonthDate }}</p>
+        <p>{{ formattedAddedDate }}</p>
+      </div>
+    </div>
+  </YesNoModal>
 </template>
 
 <script lang="ts">
 import type { Order } from '@/store/types'
 import dayjs from 'dayjs'
-import type { PropType } from 'vue'
+import { defineAsyncComponent, type PropType } from 'vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'OrderItem',
+  components: {
+    YesNoModal: defineAsyncComponent(() => import('@/components/UI/Modal/YesNoModal.vue'))
+  },
   data() {
     return {
       totalUAH: 0,
-      totalUSD: 0
+      totalUSD: 0,
+      showModal: false
     }
   },
   props: {
@@ -64,7 +100,10 @@ export default {
   computed: {
     ...mapState('orders', ['loading']),
     formattedAddedDate() {
-      return this.formatDate(this.order.date)
+      return this.formatDate(this.order.date, 'DD / MMM / YYYY')
+    },
+    formattedMonthDate() {
+      return this.formatDate(this.order.date, 'DD / MM')
     }
   },
   watch: {
@@ -78,6 +117,12 @@ export default {
     async deleteOrder() {
       await this.$store.dispatch('orders/deleteOrder', this.order.id)
       await this.$store.dispatch('orders/getOrders')
+    },
+    openModal() {
+      this.showModal = true
+    },
+    closeModal() {
+      this.showModal = false
     },
     calculateTotalPrices() {
       this.totalUSD = 0
@@ -95,28 +140,13 @@ export default {
         }
       })
     },
-    formatDate(date: string): string {
+    formatDate(date: string, format: string): string {
       if (!date || !dayjs(date).isValid()) {
         return 'Invalid date'
       }
 
-      return dayjs(date).format('DD / MM / YYYY')
+      return dayjs(date).format(format)
     }
-    // calculateTotalPrices() {
-    //   const totals = this.order.products.reduce((acc, product) => {
-    //     product.price.forEach(price => {
-    //       if (price.symbol === 'USD') {
-    //         acc.totalUSD += price.value;
-    //       } else if (price.symbol === 'UAH') {
-    //         acc.totalUAH += price.value;
-    //       }
-    //     });
-    //     return acc;
-    //   }, { totalUSD: 0, totalUAH: 0 });
-
-    //   this.totalUSD = totals.totalUSD;
-    //   this.totalUAH = totals.totalUAH;
-    // }
   }
 }
 </script>
@@ -136,6 +166,7 @@ export default {
   transition: 0.5s;
   cursor: pointer;
   position: relative;
+  padding-left: 30px;
 }
 
 .order_item:hover,
@@ -233,5 +264,23 @@ export default {
   font-size: 8px;
   font-weight: 600;
   margin-left: 5px;
+}
+
+.modal-item {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.order_item_products_created-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.order_item_products_created-date_monthly {
+  opacity: 0.6;
+  font-size: 12px;
 }
 </style>

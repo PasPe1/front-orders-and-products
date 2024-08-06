@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <p>You sure want delete?</p>
+          <p>{{ $t('YesNoModal.title') }}</p>
           <div class="modal-close" @click="closeModal()">
             <img src="../../../assets/icons/cross.svg" />
           </div>
@@ -13,11 +13,11 @@
         </div>
         <div class="modal-footer">
           <button type="button" @click="closeModal" :class="'btn'">
-            {{ 'ОТМЕНИТЬ' }}
+            {{ $t('YesNoModal.cancel') }}
           </button>
           <button type="button" @click="deleteProduct" class="btn btn-light text-danger">
             <img class="btn_icon" src="../../../assets/icons/trash.svg" />
-            {{ $t('message.hello') }}
+            {{ $t('YesNoModal.delete') }}
           </button>
         </div>
       </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import type { Product } from '@/store/types'
+import type { Order, Product } from '@/store/types'
 import type { PropType } from 'vue'
 
 export default {
@@ -34,8 +34,8 @@ export default {
   props: {
     visibility: Boolean,
     variant: String,
-    product: {
-      type: Object as PropType<Product>,
+    item: {
+      type: Object as PropType<Product | Order>,
       required: true
     }
   },
@@ -44,7 +44,7 @@ export default {
       this.$emit('close-modal')
     },
     deleteProduct() {
-      this.$emit('delete-product', this.product)
+      this.$emit('delete-product', this.item)
     }
   }
 }

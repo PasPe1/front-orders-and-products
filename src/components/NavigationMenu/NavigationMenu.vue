@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="navbar_avatar">
-      <img class="navbar_avatar_image" src="/avatar.jpg" />
+      <img class="navbar_avatar_image" src="../../assets/icons/avatar.jpg" />
     </div>
     <ul class="navbar_list" id="navbar">
       <li
@@ -15,7 +15,7 @@
         </RouterLink>
       </li>
       <Spinner v-if="loading" />
-      <CustomButton v-else text="Logout" :onClick="logout" :disabled="loading" />
+      <CustomButton v-else :text="$t('logout')" @click="logout" :disabled="loading" />
       <LanguageSwitcher />
     </ul>
   </div>
