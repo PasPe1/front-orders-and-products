@@ -1,6 +1,6 @@
 <template>
   <div class="top-menu">
-    <RedirectLink to="orders">
+    <RedirectLink to="/">
       <div class="top-menu_logo">
         <img
           class="top-menu_logo_image"

@@ -6,6 +6,8 @@ COPY package*.json ./
 
 RUN npm install
 
+ENV VITE_API_ENDPOINT=http://localhost:3001/
+
 COPY . .
 
 RUN npm run build
