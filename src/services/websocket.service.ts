@@ -1,4 +1,5 @@
-import { io, Socket } from 'socket.io-client'
+import type { Socket } from 'socket.io-client'
+import { io } from 'socket.io-client'
 
 class WebSocketService {
   private socket: Socket
@@ -12,10 +13,6 @@ class WebSocketService {
       callback(count)
     })
   }
-
-  // notifyTabOpened(count: number) {
-  //   this.socket.emit('tabOpened', count)
-  // }
 
   notifyTabClosed() {
     this.socket.emit('tabClosed')

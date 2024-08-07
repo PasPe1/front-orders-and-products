@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { expect, it, vi } from 'vitest'
-import CustomButton from '../../src/components/UI/CustomButton/CustomButton.vue'
+import CustomButton from '@/components/UI/CustomButton/CustomButton.vue'
 
 it.only('render button', async () => {
   const onClickSpy = vi.fn()
@@ -10,8 +10,8 @@ it.only('render button', async () => {
     props: {
       text: 'Hello',
       onClick: onClickSpy,
-      disabled: false
-    }
+      disabled: false,
+    },
   })
 
   expect(wrapper.props().text).toBe(props.text)
@@ -19,9 +19,7 @@ it.only('render button', async () => {
 
   const button = wrapper.find('button')
 
-  // Trigger a click event on the button
   await button.trigger('click')
 
-  // Assert that the onClick function was called
   expect(onClickSpy).toHaveBeenCalled()
 })
