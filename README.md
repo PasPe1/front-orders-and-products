@@ -1,4 +1,4 @@
-# Nuxt 3 Minimal Starter
+# Nuxt 3
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
@@ -9,6 +9,8 @@ SSR application, order and product manager. Functions for user registration, ord
 Future Goal: add toaste and input validation
 
 ## command for start project in docker: docker-compose up -d --build
+
+docker: docker-compose up -d --build
 
 for dev: 
 
