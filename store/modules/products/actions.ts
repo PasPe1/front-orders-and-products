@@ -26,7 +26,6 @@ const productsActions = {
     }
   },
   async getProductsByOrderId({ commit }: ICommit, id: number) {
-    console.log('id', id)
     try {
       commit('loading')
       const response = await axiosInstance.get(`products/getByOrder/${id}`)
@@ -38,7 +37,6 @@ const productsActions = {
     }
   },
   async createProduct({ commit }: ICommit, product: Product) {
-    console.log('order', product)
     try {
       commit('loading')
       const response = await axiosInstance.post(`products`, product)

@@ -15,7 +15,6 @@ const ordersActions = {
     }
   },
   async deleteOrder({ commit }: ICommit, id: number) {
-    console.log('id', id)
     try {
       commit('loading')
       await axiosInstance.delete(`orders/${id}`)
@@ -27,7 +26,6 @@ const ordersActions = {
     }
   },
   async createOrder({ commit }: ICommit, order: Order) {
-    console.log('order', order)
     try {
       commit('loading')
       const response = await axiosInstance.post(`orders`, order)

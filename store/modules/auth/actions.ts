@@ -15,7 +15,6 @@ const authActions = {
         Cookies.set('accessToken', response.data.refresh_token)
         Cookies.set('refreshToken', response.data.access_token)
       }
-      console.log('loginSuccess', response.data)
       commit('loginSuccess', response.data)
       router.push('/')
       return response.data
