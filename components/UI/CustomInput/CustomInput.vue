@@ -5,7 +5,6 @@
       v-if="type === 'textarea'"
       v-model="model"
       class="form-control"
-      :type="type"
       :placeholder="placeholder"
       :required="required"
     />

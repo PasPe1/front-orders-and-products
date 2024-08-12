@@ -5,19 +5,21 @@ const ordersMutations = {
     state.loading = false
     state.orders = orders
   },
-  ordersailure(state: OrdersState) {
+  ordersFailure(state: OrdersState) {
     state.loading = false
-    state.orders = []
-  },
-  loading(state: OrdersState) {
-    state.loading = true
   },
   success(state: OrdersState) {
+    state.loading = false
+  },
+  deleteOrderSuccess(state: OrdersState) {
     state.loading = false
   },
   createOrderSuccess(state: OrdersState, order: Order) {
     state.loading = false
     state.orders = [...state.orders, order]
+  },
+  loadingOrder(state: OrdersState) {
+    state.loading = true
   },
 }
 

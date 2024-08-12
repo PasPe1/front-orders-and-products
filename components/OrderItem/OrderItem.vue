@@ -70,7 +70,9 @@
     @close-modal="closeModal"
   >
     <div class="modal-item">
-      <p>{{ order.title }}</p>
+      <p class="order_item_name">
+        {{ order.title }}
+      </p>
       <div class="order_item_products-number">
         <div class="order_item_products-number_svg">
           <img src="../../assets/icons/hamburger-menu.svg">
@@ -294,10 +296,11 @@ export default {
 }
 
 .modal-item {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 150px 1fr 1fr;
   align-items: center;
   width: 100%;
+  gap: 15px;
 }
 
 .order_item_products_created-date {

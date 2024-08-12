@@ -21,24 +21,28 @@
                 v-model="product.serialNumber"
                 type="number"
                 :placeholder="$t('AddProductModal.serialNumber')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.isNew"
                 type="number"
                 :placeholder="$t('AddProductModal.status')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.title"
                 :placeholder="$t('AddProductModal.title')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.type"
                 :placeholder="$t('AddProductModal.type')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.specification"
-                type="number"
                 :placeholder="$t('AddProductModal.specification')"
+                :required="true"
               />
             </div>
             <div>
@@ -46,31 +50,37 @@
                 v-model="product.guarantee.start"
                 type="date"
                 :placeholder="$t('AddProductModal.start')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.guarantee.end"
                 type="date"
                 :placeholder="$t('AddProductModal.end')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.price[0].value"
                 type="number"
                 :placeholder="$t('AddProductModal.priceUSD')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.price[1].value"
                 type="number"
                 :placeholder="$t('AddProductModal.priceUAH')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.sequence"
                 type="number"
                 :placeholder="$t('AddProductModal.sequence')"
+                :required="true"
               />
               <CustomInput
                 v-model="product.date"
                 type="date"
                 :placeholder="$t('AddProductModal.date')"
+                :required="true"
               />
             </div>
           </form>
@@ -102,8 +112,9 @@ export default {
     visibility: Boolean,
     variant: String,
     loading: Boolean,
+    orderId: Number,
   },
-  emits: ['close-modal', 'create-product'],
+  emits: ['close-modal'],
   data() {
     return {
       product: {
@@ -131,9 +142,16 @@ export default {
       this.$emit('close-modal')
       this.resetProduct()
     },
-    createProduct() {
-      this.$emit('create-product', this.product)
-      this.resetProduct()
+    async createProduct() {
+      try {
+        await this.$store.dispatch('products/createProduct', { ...this.product, orderId: this.orderId })
+        this.$emit('close-modal')
+        this.resetProduct()
+        await this.$store.dispatch('orders/getOrders')
+      }
+      catch (e) {
+        console.log(e)
+      }
     },
     resetProduct() {
       this.product = {

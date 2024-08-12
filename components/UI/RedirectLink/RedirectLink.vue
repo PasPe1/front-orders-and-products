@@ -27,5 +27,6 @@ export default {
 .link {
   text-decoration: none;
   margin: 5px;
+  margin-left: 0px;
 }
 </style>

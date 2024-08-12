@@ -56,58 +56,72 @@
         </div>
         <div
           class="orders_list_item_delete"
-          @click="openDeleteModal"
+          @click="openDeleteModal(product)"
         >
           <img src="../../assets/icons/trash.svg">
         </div>
-        <YesNoModal
-          :item="product"
-          :visibility="showDeleteModal"
-          :loading="loading"
-          @delete-product="deleteProduct"
-          @close-modal="closeDeleteModal"
-        >
-          <div class="modal-item">
-            <div
-              class="order-info_product-list_item_dot"
-              :class="{ repair: product.isNew === 0 }"
-            />
-            <img
-              class="order-info_item_photo"
-              src="../../assets/icons/monitor.jpg"
-            >
-            <div>
-              <RedirectLink
-                class="order-info_product_title"
-                :to="`products/${product.id}`"
-                :text="product.title"
-              />
-              <p class="order-info_product_serial-number">
-                {{ product.serialNumber }}
-              </p>
-            </div>
-            <div>
-              <p
-                class="order-info_product-list_item_status"
-                :class="{ repair: product.isNew === 0 }"
-              >
-                {{
-                  product.isNew
-                    ? $t('orders.orderInfo.status.available')
-                    : $t('orders.orderInfo.status.repair')
-                }}
-              </p>
-            </div>
-          </div>
-        </YesNoModal>
+      </div>
+      <div
+        v-if="loading"
+        class="products-loader"
+      >
+        <Spinner />
+      </div>
+      <div
+        v-if="!loading && products.length === 0"
+        class="empty-products"
+      >
+        <h3>{{ $t('products.noProducts') }}</h3>
       </div>
     </div>
+    <YesNoModal
+      v-if="selectedProduct"
+      :custom-class="'order-info_product_title'"
+      :item="selectedProduct"
+      :visibility="showDeleteModal"
+      :loading="loading"
+      @delete-product="deleteProduct"
+      @close-modal="closeDeleteModal"
+    >
+      <div class="modal-item">
+        <div
+          class="order-info_product-list_item_dot"
+          :class="{ repair: selectedProduct.isNew === 0 }"
+        />
+        <img
+          class="order-info_item_photo"
+          src="../../assets/icons/monitor.jpg"
+        >
+        <div>
+          <RedirectLink
+            class="order-info_product_title"
+            :to="`products/${selectedProduct.id}`"
+            :text="selectedProduct.title"
+          />
+          <p class="order-info_product_serial-number">
+            {{ selectedProduct.serialNumber }}
+          </p>
+        </div>
+        <div>
+          <p
+            class="order-info_product-list_item_status"
+            :class="{ repair: selectedProduct.isNew === 0 }"
+          >
+            {{
+              selectedProduct.isNew
+                ? $t('orders.orderInfo.status.available')
+                : $t('orders.orderInfo.status.repair')
+            }}
+          </p>
+        </div>
+      </div>
+    </YesNoModal>
     <AddProductModal
       :visibility="showModal"
       :loading="loading"
       variant="success"
+      :order-id="order.id"
       @close-modal="closeModal"
-      @create-product="createProduct"
     />
   </div>
 </template>
@@ -127,6 +141,7 @@ export default {
       () => import('@/components/UI/RedirectLink/RedirectLink.vue'),
     ),
     YesNoModal: defineAsyncComponent(() => import('@/components/UI/Modal/YesNoModal.vue')),
+    Spinner: defineAsyncComponent(() => import('@/components/UI/Spinner/Spinner.vue')),
   },
   props: {
     order: {
@@ -139,6 +154,7 @@ export default {
     return {
       showModal: false,
       showDeleteModal: false,
+      selectedProduct: null as Product | null,
     }
   },
   computed: {
@@ -161,30 +177,28 @@ export default {
     closeModal() {
       this.showModal = false
     },
-    openDeleteModal() {
+    openDeleteModal(product: Product) {
+      console.log('openDeleteModalopenDeleteModal')
+      this.selectedProduct = product
       this.showDeleteModal = true
     },
     closeDeleteModal() {
       this.showDeleteModal = false
+      this.selectedProduct = null
     },
     resetOrder() {
       this.$emit('reset-order')
     },
     async deleteProduct(product: Product) {
-      await this.$store.dispatch('products/deleteProduct', product.id)
-      await this.$store.dispatch('products/getProducts')
-      await this.$store.dispatch('orders/getOrders')
-    },
-    async createProduct(product: Product) {
       try {
-        product.orderId = this.order.id
-        await this.$store.dispatch('products/createProduct', product)
-        await this.$store.dispatch('orders/getOrders')
-        this.closeModal()
+        await this.$store.dispatch('products/deleteProduct', product.id)
+        this.closeDeleteModal()
       }
       catch (e) {
         console.log(e)
       }
+      await this.$store.dispatch('products/getProducts')
+      await this.$store.dispatch('orders/getOrders')
     },
   },
 }
@@ -240,14 +254,6 @@ export default {
   margin: auto;
 }
 
-/* .order-info_item_title {
-  display: block;
-  margin: 0px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-} */
-
 .order-info_product_title {
   display: block;
   text-decoration: underline;
@@ -267,11 +273,16 @@ export default {
   opacity: 0.6;
 }
 
+.empty-products,
+.products-loader {
+  display: flex;
+  justify-content: center;
+}
+
 .order-info_product-list_item {
   background-color: rgb(255, 255, 255);
   height: 50px;
   border: 1px solid #e3e8ea;
-  /* padding: 10px; */
   display: grid;
   grid-template-columns: 50px 100px 200px 1fr 30px;
   align-items: center;
@@ -320,7 +331,9 @@ export default {
 }
 
 .modal-item {
+  width: 100%;
   display: grid;
-  grid-template-columns: 50px 100px 3fr 1fr;
+  grid-template-columns: 50px 100px 150px 1fr;
+  gap: 20px;
 }
 </style>

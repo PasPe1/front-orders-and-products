@@ -5,12 +5,8 @@ const productsMutations = {
     state.loading = false
     state.products = products
   },
-  productsailure(state: ProductsState) {
+  productsFailure(state: ProductsState) {
     state.loading = false
-    state.products = []
-  },
-  loading(state: ProductsState) {
-    state.loading = true
   },
   success(state: ProductsState) {
     state.loading = false
@@ -22,6 +18,9 @@ const productsMutations = {
   cleareProducts(state: ProductsState) {
     state.loading = false
     state.products = []
+  },
+  loadingProduct(state: ProductsState) {
+    state.loading = true
   },
 }
 

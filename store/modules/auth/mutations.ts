@@ -29,7 +29,7 @@ const authMutations = {
     state.status.loggedIn = false
     state.loading = false
   },
-  loading(state: AuthState) {
+  loadingAuth(state: AuthState) {
     state.loading = true
   },
 }

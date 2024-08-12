@@ -5,14 +5,17 @@
     :disabled="disabled"
     @click.prevent="onClick"
   >
-    <span v-if="loading">
+    <span
+      v-if="loading"
+      class="btn-loader"
+    >
       <Spinner />
     </span>
     <span
-      v-if="text"
+      v-else-if="text"
       class="text-light"
     >
-      <slot />
+      <!-- <slot /> -->
       {{ text }}
     </span>
     <span
@@ -52,3 +55,11 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.btn-loader {
+  display: flex;
+  min-width: 60px;
+  justify-content: center;
+}
+</style>

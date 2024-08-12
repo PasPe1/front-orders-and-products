@@ -25,6 +25,12 @@
           :show-product="showProduct"
           @set-active="setActiveOrder(order)"
         />
+        <div v-if="loading">
+          <Spinner />
+        </div>
+        <div v-if="!loading && orders.length === 0">
+          <h3>{{ $t('orders.noOrders') }}</h3>
+        </div>
       </div>
       <OrderInfo
         v-if="activeOrder"
@@ -37,7 +43,6 @@
       :visibility="showModal"
       :loading="loading"
       @close-modal="closeModal"
-      @create-order="createOrder"
     />
   </div>
 </template>
@@ -58,6 +63,7 @@ export default defineComponent({
     OrderItem: defineAsyncComponent(() => import('../../components/OrderItem/OrderItem.vue')),
     AddOrderModal: defineAsyncComponent(() => import('../../components/UI/Modal/AddOrderModal.vue')),
     OrderInfo: defineAsyncComponent(() => import('../../components/OrderInfo/OrderInfo.vue')),
+    Spinner: defineAsyncComponent(() => import('~/components/UI/Spinner/Spinner.vue')),
   },
   setup() {
     const store = useStore()
@@ -74,16 +80,6 @@ export default defineComponent({
 
     const closeModal = () => {
       showModal.value = false
-    }
-
-    const createOrder = async (order: Order) => {
-      try {
-        await store.dispatch('orders/createOrder', order)
-        closeModal()
-      }
-      catch (e) {
-        console.log(e)
-      }
     }
 
     const setActiveOrder = (order: Order) => {
@@ -109,7 +105,6 @@ export default defineComponent({
       loading,
       openModal,
       closeModal,
-      createOrder,
       setActiveOrder,
       resetActiveOrder,
     }

@@ -21,7 +21,8 @@
         "orderItem": {
             "countProduct": "Продукт(ів)"
         },
-        "orders": "Замовлення"
+        "orders": "Замовлення",
+        "noOrders": "Немає доданих замовлень"
     },
     "products": {
         "productItem": {
@@ -38,7 +39,14 @@
         },
         "products": "Продукти",
         "type": "Тип",
-        "specification": "Специфікація"
+        "specification": "Специфікація",
+        "noProducts": "Немає доданих продуктів",
+        "error": {
+            "create": "Помилка створення продукту!"
+        },
+        "success": {
+            "create": "Продукт був створеный!"
+        }
     },
     "topMenu": {
         "search": "Пошук",

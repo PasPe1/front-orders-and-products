@@ -1,10 +1,12 @@
-import { shallowMount } from '@vue/test-utils'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+import { mount } from '@vue/test-utils'
 import AddOrderModal from '@/components/UI/Modal/AddOrderModal.vue'
 
-describe('AddOrderModal.vue', () => {
-  it('emits close-modal event when closeModal method is called', async () => {
-    const wrapper = shallowMount(AddOrderModal, {
+describe('AddOrderModal', () => {
+  const $t = vi.fn(key => key)
+
+  it('renders correctly when visibility is true', () => {
+    const wrapper = mount(AddOrderModal, {
       props: {
         visibility: true,
         variant: 'primary',
@@ -12,18 +14,15 @@ describe('AddOrderModal.vue', () => {
       },
       global: {
         mocks: {
-          $t: (key: string) => key,
+          $t,
         },
       },
     })
-
-    wrapper.vm.closeModal()
-
-    expect(wrapper.emitted('close-modal')).toBeTruthy()
+    expect(wrapper.find('.modal').exists()).toBe(true)
   })
 
-  it('emits create-order event with correct order data when createOrder method is called', async () => {
-    const wrapper = shallowMount(AddOrderModal, {
+  it('emits close-modal event and resets order when closeModal is called', async () => {
+    const wrapper = mount(AddOrderModal, {
       props: {
         visibility: true,
         variant: 'primary',
@@ -31,32 +30,43 @@ describe('AddOrderModal.vue', () => {
       },
       global: {
         mocks: {
-          $t: (key: string) => key,
+          $t,
         },
       },
     })
 
-    wrapper.setData({
-      order: {
-        title: 'Test Order',
-        date: '2024-08-07',
-        description: 'This is a test order description.',
+    const closeModalSpy = vi.spyOn(wrapper.vm, 'closeModal')
+    wrapper.vm.closeModal()
+
+    expect(closeModalSpy).toHaveBeenCalled()
+    expect(wrapper.emitted('close-modal')).toBeTruthy()
+    expect(wrapper.vm.order).toEqual({ title: '', date: '', description: '' })
+  })
+
+  it('validates form inputs correctly', async () => {
+    const wrapper = mount(AddOrderModal, {
+      props: {
+        visibility: true,
+        variant: 'primary',
+        loading: false,
+      },
+      global: {
+        mocks: {
+          $t,
+        },
       },
     })
 
-    await wrapper.vm.createOrder()
+    wrapper.vm.order.title = ''
+    wrapper.vm.order.date = ''
+    wrapper.vm.order.description = ''
+    await wrapper.vm.$nextTick()
 
-    expect(wrapper.emitted('create-order')).toBeTruthy()
-    expect(wrapper.emitted('create-order')[0][0]).toEqual({
-      title: 'Test Order',
-      date: '2024-08-07',
-      description: 'This is a test order description.',
-    })
+    const isValid = wrapper.vm.validate()
 
-    expect(wrapper.vm.order).toEqual({
-      title: '',
-      date: '',
-      description: '',
-    })
+    expect(isValid).toBe(false)
+    expect(wrapper.vm.errors.title).toBe('Title is required!')
+    expect(wrapper.vm.errors.date).toBe('Date is required!')
+    expect(wrapper.vm.errors.description).toBe('Description is required!')
   })
 })

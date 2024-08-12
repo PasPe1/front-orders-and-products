@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="modal-body">
-          <slot />
+          <slot :class="customClass" />
         </div>
         <div class="modal-footer">
           <button
@@ -61,6 +61,10 @@ export default {
     item: {
       type: Object as PropType<Product | Order>,
       required: true,
+    },
+    customClass: {
+      type: String as PropType<string>,
+      default: '',
     },
     loading: Boolean,
   },

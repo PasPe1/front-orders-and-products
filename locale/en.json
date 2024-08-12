@@ -21,7 +21,8 @@
         "orderItem": {
             "countProduct": "Products"
         },
-        "orders": "Orders"
+        "orders": "Orders",
+        "noOrders": "No added orders"
     },
     "products": {
         "productItem": {
@@ -38,7 +39,18 @@
         },
         "products": "Products",
         "type": "Type",
-        "specification": "Specification"
+        "specification": "Specification",
+        "noProducts": "No added products",
+        "error": {
+            "create": "Create product error!",
+            "getByOrder": "Get products error!",
+            "delete": "Delete product error!",
+            "get": "Get products error!"
+        },
+        "success": {
+            "create": "Product was created!",
+            "delete": "Product was deleted!"
+        }
     },
     "topMenu": {
         "search": "Search",

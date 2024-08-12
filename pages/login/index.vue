@@ -12,14 +12,16 @@
         type="password"
         :placeholder="$t('login.password')"
       />
-      <div class="form_submit-buttons">
-        <Spinner v-if="loading" />
-        <CustomButton
-          v-else
-          :text="$t('login.login')"
-          :on-click="handleLogin"
-          :disabled="loading"
-        />
+      <div class="form_submit">
+        <div class="form_submit-button">
+          <Spinner v-if="loading" />
+          <CustomButton
+            v-else
+            :text="$t('login.login')"
+            :on-click="handleLogin"
+            :disabled="loading"
+          />
+        </div>
         <p>
           {{ $t('login.dhAccount') }} <RedirectLink
             to="register"
@@ -86,10 +88,16 @@ export default {
   min-width: 300px;
 }
 
-.form_submit-buttons {
+.form_submit {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.form_submit-button {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
 }
 </style>

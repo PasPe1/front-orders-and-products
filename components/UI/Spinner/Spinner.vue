@@ -1,11 +1,11 @@
 <template>
   <div
     v-show="loading"
-    class="lds-hourglass"
+    class="loader"
     :style="{ width: `${size}px`, height: `${size}px` }"
   >
     <div
-      class="lds-hourglass-after"
+      class="loader-after"
       :style="[spinnerStyle]"
     />
   </div>
@@ -25,7 +25,7 @@ export default {
     },
     color: {
       type: String,
-      default: '#7f58af',
+      default: 'var(--primary-green-color)',
     },
     duration: {
       type: String,
@@ -45,11 +45,11 @@ export default {
 </script>
 
 <style scoped>
-.lds-hourglass {
+.loader {
     display: inline-block;
     position: relative;
 }
-.lds-hourglass-after {
+.loader-after {
     content: ' ';
     display: block;
     border-radius: 50%;
@@ -59,10 +59,10 @@ export default {
     box-sizing: border-box;
     border: 32px solid #fff;
     border-color: #fff transparent #fff transparent;
-    animation-name: lds-hourglass;
+    animation-name: loader;
     animation-iteration-count: infinite;
 }
-@keyframes lds-hourglass {
+@keyframes loader {
     0% {
         transform: rotate(0);
         animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);

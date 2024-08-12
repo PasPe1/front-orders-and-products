@@ -29,6 +29,12 @@
         :product="product"
       />
     </div>
+    <div v-if="loading">
+      <Spinner />
+    </div>
+    <div v-if="!loading && products.length === 0">
+      <h3>{{ $t('products.noProducts') }}</h3>
+    </div>
   </div>
 </template>
 
@@ -46,24 +52,16 @@ export default {
   components: {
     ProductItem: defineAsyncComponent(() => import('@/components/ProductItem/ProductItem.vue')),
     CustomSelectInput: defineAsyncComponent(() => import('@/components/UI/CustomSelectInput/CustomSelectInput.vue')),
+    Spinner: defineAsyncComponent(() => import('~/components/UI/Spinner/Spinner.vue')),
   },
   setup() {
     const store = useStore()
 
     const type = ''
     const specification = ''
-    const showModal = ref(true)
 
     const products = computed(() => store.state.products.products)
     const loading = computed(() => store.state.products.loading)
-
-    const openModal = () => {
-      showModal.value = true
-    }
-
-    const closeModal = () => {
-      showModal.value = false
-    }
 
     onMounted(() => {
       store.dispatch('products/getProducts')
@@ -72,11 +70,8 @@ export default {
     return {
       type,
       specification,
-      showModal,
       products,
       loading,
-      openModal,
-      closeModal,
     }
   },
 }
