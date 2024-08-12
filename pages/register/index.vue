@@ -45,6 +45,7 @@
 
 <script lang="ts">
 import { defineAsyncComponent } from 'vue'
+import { toast } from 'vue3-toastify'
 import { mapState } from 'vuex'
 
 export default {
@@ -74,7 +75,41 @@ export default {
     ...mapState('auth', ['loading']),
   },
   methods: {
+    validate() {
+      let isValid = true
+
+      if (!this.user.email) {
+        toast.error('Email is required.')
+        isValid = false
+      }
+      else if (!/\S+@\S+\.\S+/.test(this.user.email)) {
+        toast.error('Email must be a valid email address.')
+        isValid = false
+      }
+
+      if (!this.user.password) {
+        toast.error('Password is required!')
+        isValid = false
+      }
+      else if (this.user.password.length < 6) {
+        toast.error('Password must be at least 6 characters long.')
+        isValid = false
+      }
+
+      if (!this.user.firstName) {
+        toast.error('First name is required!')
+        isValid = false
+      }
+
+      if (!this.user.lastName) {
+        toast.error('Last name is required!')
+        isValid = false
+      }
+
+      return isValid
+    },
     handleRegister() {
+      if (!this.validate()) return
       this.$store.dispatch('auth/register', this.user)
     },
   },
