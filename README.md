@@ -6,7 +6,7 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 
 SSR application, order and product manager. Functions for user registration, order creation, and products associated with orders. Localization: English, Ukrainian
 
-Future Goal: add toaste and input validation
+The project uses both composition api and options api for example usage
 
 ## command for start project in docker: docker-compose up -d --build
 
