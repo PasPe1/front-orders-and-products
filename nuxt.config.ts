@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  plugins: ['~/plugins/i18n.ts'],
+  plugins: ['~/plugins/i18n.ts', '~/plugins/google-maps.client.ts'],
   css: ['~/assets/main.css', 'bootstrap/dist/css/bootstrap.min.css'],
   ssr: true,
   app: {

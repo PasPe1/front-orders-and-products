@@ -40,7 +40,7 @@
                 v-if="errors.date"
                 class="invalid-data"
               >
-                {{ errors.description }}
+                {{ errors.date }}
               </div>
             </div>
             <div class="form-group">
@@ -115,15 +115,15 @@ export default {
       }
 
       if (!this.order.title.trim()) {
-        this.errors.title = 'Title is required!'
+        this.errors.title = this.$t('orders.validate.title')
         isValid = false
       }
       if (!this.order.date) {
-        this.errors.date = 'Date is required!'
+        this.errors.date = this.$t('orders.validate.date')
         isValid = false
       }
       if (!this.order.description.trim()) {
-        this.errors.description = 'Description is required!'
+        this.errors.description = this.$t('orders.validate.description')
         isValid = false
       }
 
@@ -145,6 +145,12 @@ export default {
     },
     resetOrder() {
       this.order = {
+        title: '',
+        date: '',
+        description: '',
+      }
+
+      this.errors = {
         title: '',
         date: '',
         description: '',
@@ -174,14 +180,19 @@ export default {
 .form-group {
   margin-bottom: 1rem;
   width: 100%;
+  min-height: 80px;
 }
 
 .is-invalid {
-  border-color: #dc3545;
+  border-color: var(--red-color);
 }
 
 .invalid-data {
-  color: #dc3545;
+  color: var(--red-color);
   font-size: 0.875em;
+}
+
+.modal-footer {
+  background-color: var(--grey-color);
 }
 </style>

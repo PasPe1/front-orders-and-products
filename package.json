@@ -12,6 +12,7 @@
     "start": "node .output/server/index.mjs"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
     "@nuxt/eslint": "^0.5.0",
     "@nuxtjs/i18n": "^8.3.3",
     "axios": "^1.7.3",
@@ -23,6 +24,7 @@
     "socket.io-client": "^4.7.5",
     "vue": "latest",
     "vue-axios": "^3.5.2",
+    "vue-chartjs": "^5.3.1",
     "vue-i18n": "^9.13.1",
     "vue3-toastify": "^0.2.2",
     "vuex": "^4.1.0",

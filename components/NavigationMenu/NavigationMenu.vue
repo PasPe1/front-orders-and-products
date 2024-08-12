@@ -67,12 +67,12 @@ export default defineComponent({
         title: t('route.products'),
       },
       {
-        link: '/users',
-        title: t('route.users'),
+        link: '/chart',
+        title: t('route.chart'),
       },
       {
-        link: '/settings',
-        title: t('route.settings'),
+        link: '/map',
+        title: t('route.map'),
       },
     ])
 

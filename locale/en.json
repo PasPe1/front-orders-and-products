@@ -6,8 +6,8 @@
     "route": {
         "orders": "Orders",
         "products": "Products",
-        "users": "Users",
-        "settings": "Settings"
+        "chart": "Chart",
+        "map": "Map"
     },
     "logout": "LOGOUT",
     "orders": {
@@ -22,7 +22,12 @@
             "countProduct": "Products"
         },
         "orders": "Orders",
-        "noOrders": "No added orders"
+        "noOrders": "No added orders",
+        "validate": {
+            "title": "Title is required!",
+            "date": "Date is required!",
+            "description": "Description is required!"
+        }
     },
     "products": {
         "productItem": {
@@ -76,7 +81,8 @@
         "priceUAH": "Price UAH",
         "sequence": "Sequence",
         "date": "Date",
-        "create": "Create"
+        "create": "Create",
+        "validationError": "All fields must be required!"
     },
     "YesNoModal": {
         "title": "You sure want delete?",
